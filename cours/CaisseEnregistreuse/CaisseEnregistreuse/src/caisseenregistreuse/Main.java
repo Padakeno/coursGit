@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -22,7 +23,18 @@ public class Main {
     }
     
     public void demarrer() {
-        Connection connection = null;
+        Produit p1 = new Produit(1, "legume", 1.20);
+        Produit p2 = new Produit(2, "legume", 1.20);
+        Produit p3 = new Produit(3, "legume", 1.20);
+        Produit p4 = new Produit(4, "legume", 1.20);
+        Produit p5 = new Produit(5, "legume", 1.20);
+        Produit p6 = new Produit(6, "fruit", 1.00);
+        
+        ArrayList<Produit> produits = new ArrayList<>();
+        ArrayList<Client> clients = new ArrayList<>();
+        
+        
+        /*Connection connection = null;
         PreparedStatement requete = null;
         ResultSet resultat = null;
         
@@ -40,7 +52,7 @@ public class Main {
         }
         
         try {
-            requete = connection.prepareStatement("drop table if exists produit");
+            requete = connection.prepareStatement("drop table produit");
             requete.execute();
         } catch (SQLException e) {
             if (e.getSQLState().compareTo("42Y55") != 0) {
@@ -62,7 +74,7 @@ public class Main {
             System.err.println(e.getErrorCode());
             System.err.println(e.getSQLState());
             System.exit(1);
-        }
+        }*/
         
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

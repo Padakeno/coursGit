@@ -27,7 +27,7 @@ public class ListeProduit extends AbstractListModel<Produit>{
         float total = 0;
         
         for (Produit produit : produits) {
-            float prix = produit.getPrix();
+            double prix = produit.getPrix();
         }
         
         return total;

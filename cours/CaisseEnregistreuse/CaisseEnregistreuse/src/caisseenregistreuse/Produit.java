@@ -12,20 +12,20 @@ package caisseenregistreuse;
 public class Produit {
     private int numero;
     private String nomProduit;
-    private float prix;
-    private float codeBarre;
+    private double prix;
+    private String codeBarre;
     
-    public Produit(int numero, String nomProduit, float prix) {
+    public Produit(int numero, String nomProduit, double prix) {
         this.numero = numero;
         this.nomProduit = nomProduit;
         this.prix = prix;
     }
     
-    public void setNumero(int numero) {
-        this.numero = numero;
+    public int getNumero() {
+        return this.numero;
     }
     
-    public float getCodeBarre() {
+    public String getCodeBarre() {
         return codeBarre;
     }
     
@@ -33,7 +33,7 @@ public class Produit {
         return nomProduit;
     }
     
-    public float getPrix() {
+    public double getPrix() {
         return prix;
     }
 }
