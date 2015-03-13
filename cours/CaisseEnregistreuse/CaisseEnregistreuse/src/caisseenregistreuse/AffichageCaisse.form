@@ -65,8 +65,8 @@
                                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="num2" min="-2" pref="50" max="-2" attributes="0"/>
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -88,11 +88,16 @@
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                           <Component id="numPoint" min="-2" pref="50" max="-2" attributes="0"/>
                                       </Group>
+                                      <Component id="boutonEntrer" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <Group type="102" attributes="0">
                                   <Component id="boutonSuivant" min="-2" pref="277" max="-2" attributes="0"/>
                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  <Component id="affichageCalculette" min="-2" pref="248" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -157,10 +162,15 @@
                                       <Component id="numPoint" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="numX" min="-2" pref="50" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="numX" pref="50" max="32767" attributes="0"/>
+                                      <Component id="boutonEntrer" max="32767" attributes="0"/>
+                                  </Group>
                               </Group>
-                              <Component id="jScrollPane2" max="32767" attributes="0"/>
+                              <Component id="jScrollPane2" pref="162" max="32767" attributes="0"/>
                           </Group>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="affichageCalculette" min="-2" pref="31" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -378,6 +388,18 @@
         <Component class="javax.swing.JButton" name="boutonSuivant">
           <Properties>
             <Property name="text" type="java.lang.String" value="Suivant"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="boutonEntrer">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Entrer"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="affichageCalculette">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+            <Property name="autoscrolls" type="boolean" value="false"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
       </SubComponents>
