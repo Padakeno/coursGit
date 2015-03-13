@@ -1,0 +1,57 @@
+rappel sur le MVC (Modèle - Vue - Contrôleur)
+
+
+avec Swing, les composants graphiques implémentent la vue et le contrôleur
+il reste à coder le modèle et à associer le modèle au composant Swing
+
+
+
+L'objectif est de gérer une liste de snippets (un snippet est un morceau de code) à l'aide du composant graphique JList
+
+Méthode de travail :
+on se base sur l'exemple "demo_jlist"
+
+1) création de la classe Snippet pour représenter le concept de snippet 
+un snippet est caractérisé par un titre, un contenu et 5 tags
+
+2) création de la classe ModeleListeSnippets destinée à être associée à la JList
+Cette classe étend la classe AbstractListModel (qui elle-même implémente l'interface ListModel)
+Cette classe est générique, on précise donc que ce sont des objets de type Snippet qui sont gérés dans le modèlé
+
+3) création de le classe Main : elle est chargée de démarrer le programme; construit et lance la fenêtre principale
+
+4) création de la classe FenetrePrincipale : JFrame
+on supprime la méthode main (qui a été générée automatiquement)
+il faut associer le modèle et le composant JList : 
+    - clic droit sur la JList puis item "Customize code"
+    - repérer le code générer où la méthode setModel est utilisée et mettre son propre code
+
+
+
+
+***** gestion du double clic sur un item de la liste ***** 
+en mode "design", clic-droit sur la JList puis Events > Mouse > mouseClicked
+ajouter le code (par exemple) :
+
+        JList liste = (JList)evt.getSource();
+        if (evt.getClickCount() == 2) {
+            int index = liste.locationToIndex(evt.getPoint());
+            this.jTextField1.setText(this.modeleListeSnippets.getElementAt(index).toString());            
+        }
+
+
+
+***** ajout d'une icône ***** 
+
+1) création d'un paquetage nommé "images" destiné à recevoir les images de l'application
+
+2) ajout du fichier contenant l'icône dans le répertoire "images"
+
+3) ajout dans le constucteur de la fenêtre principale du code suivant :
+
+        // mise en place de l'icône de l'application
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        Image im = tk.getImage(getClass().getResource("/images/icone.png"));
+        ImageIcon icon = new ImageIcon(im);
+        setIconImage(icon.getImage());
+
