@@ -1,0 +1,16 @@
+on a :
+  - une classe Produit avec une TVA Ã  19,6 %
+  - une classe ProduitPetrolier avec une TIPP Ã  60 % + une TVA Ã  19,6 %
+  - une classe ProduitTVAReduite avec une TVA Ã  5,5 %
+
+1/ Ecriver pour chacune de ces classes la méthode calculerPrixTTC.
+2/ redéfinissez la méthode toString()
+
+
+
+Ecrivez le code qui créé un tableau de 10 produits
+contenant Ã  votre convenance des poduits, des produits
+pétroliers, des produits Ã  TVA réduite.
+
+Puis avec une boucle "foreach" vous parcourerez le tableau
+afin d'afficher chacun des Eléments.
