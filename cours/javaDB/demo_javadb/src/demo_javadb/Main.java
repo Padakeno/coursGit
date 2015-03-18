@@ -11,7 +11,7 @@ import java.sql.SQLException;
  * Ce programme démontre l'utilisation de JavaDB (Derby).
  * Un dossier portant le nom de la base utilisée ainsi qu'un fichier derby.log sont créés sur le disque à l'endroit
  * où la machine virtuelle est lancée.
- * @author A. FRANÇOIS
+ * @author A. FRANÇOIS prof de slam
  */
 public class Main {
 
