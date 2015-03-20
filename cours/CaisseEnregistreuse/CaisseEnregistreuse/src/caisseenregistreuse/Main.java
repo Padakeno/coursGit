@@ -23,18 +23,17 @@ public class Main {
     }
     
     public void demarrer() {
-        Produit p1 = new Produit(1, "legume", 1.20);
+        /*Produit p1 = new Produit(1, "legume", 1.20);
         Produit p2 = new Produit(2, "legume", 1.20);
         Produit p3 = new Produit(3, "legume", 1.20);
         Produit p4 = new Produit(4, "legume", 1.20);
         Produit p5 = new Produit(5, "legume", 1.20);
-        Produit p6 = new Produit(6, "fruit", 1.00);
+        Produit p6 = new Produit(6, "fruit", 1.00);*/
         
         ArrayList<Produit> produits = new ArrayList<>();
         ArrayList<Client> clients = new ArrayList<>();
         
-        
-        /*Connection connection = null;
+        Connection connection = null;
         PreparedStatement requete = null;
         ResultSet resultat = null;
         
@@ -66,7 +65,7 @@ public class Main {
         }
         
         try {
-            requete = connection.prepareStatement("create table produit(id int, nomproduit varchar(30), libelle varchar(30), prix float, primary key(id))");
+            requete = connection.prepareStatement("create table produit(id int, nomproduit varchar(30), libelle varchar(30), prix double, primary key(id))");
             requete.execute();
         } catch (SQLException e) {
             System.err.println("erreur lors de la création de la table \"produit\" dans le Main.java");
@@ -74,11 +73,24 @@ public class Main {
             System.err.println(e.getErrorCode());
             System.err.println(e.getSQLState());
             System.exit(1);
-        }*/
+        }
+        
+        try {
+            requete = connection.prepareStatement("insert into produit values (?, ?, ?, ?)");
+            requete.setInt(1, 1);
+            requete.setString(2, "legume");
+            requete.setString(3, "legume frais pour vous");
+            requete.setDouble(4, 15.90);
+            requete.execute();
+        } catch(SQLException e) {
+            e.printStackTrace();
+            System.err.println("erreur lors de l'insertion");
+            System.exit(1);	
+        }
         
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AffichageCaisse().setVisible(true);
+                new AffichageCaisse(produits).setVisible(true);
             }
         });
     }
