@@ -39,7 +39,7 @@ public class AffichageCaisse extends javax.swing.JFrame {
     }
     
     public void envoyer(String s) {
-        numeroProduit = Integer.parseInt(affichageCalculette.getText());
+        numeroProduit = Integer.parseInt(s);
         affichageCalculette.setText("");
         
         try {
@@ -49,9 +49,18 @@ public class AffichageCaisse extends javax.swing.JFrame {
             while (resultat.next()) {
                 String nomProduit = resultat.getString("nomProduit");
                 double prix = resultat.getDouble("prix");
-                produits.add(new Produit(numeroProduit, nomProduit, prix));
+                try {
+                    requete = connection.prepareStatement("insert into recupProduit values (?, ?, ?)");
+                    requete.setInt(1, numeroProduit);
+                    requete.setString(2, nomProduit);
+                    requete.setDouble(3, prix);
+                    requete.execute();
+                } catch(SQLException e) {
+                    e.printStackTrace();
+                    System.err.println("erreur lors de l'insertion");
+                    System.exit(1);
+                }
             }
-
         } catch(SQLException e) {
             e.printStackTrace();
             System.err.println("erreur lors de l'insertion");

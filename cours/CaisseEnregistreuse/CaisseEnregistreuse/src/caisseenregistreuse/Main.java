@@ -17,6 +17,8 @@ import java.util.ArrayList;
  * @author slam
  */
 public class Main {
+    private ArrayList<Produit> produits = new ArrayList<>();
+    private ArrayList<Client> clients = new ArrayList<>();
     public static void main(String[] args) {
         Main m = new Main();
         m.demarrer();
@@ -29,9 +31,6 @@ public class Main {
         Produit p4 = new Produit(4, "legume", 1.20);
         Produit p5 = new Produit(5, "legume", 1.20);
         Produit p6 = new Produit(6, "fruit", 1.00);*/
-        
-        ArrayList<Produit> produits = new ArrayList<>();
-        ArrayList<Client> clients = new ArrayList<>();
         
         Connection connection = null;
         PreparedStatement requete = null;
@@ -75,6 +74,31 @@ public class Main {
             System.exit(1);
         }
         
+        /*try {
+            requete = connection.prepareStatement("drop table recupProduit");
+            requete.execute();
+        } catch (SQLException e) {
+            if (e.getSQLState().compareTo("42Y55") != 0) {
+                // le code d'erreur n'est pas 42Y55 : il y a un problème
+                System.err.println("erreur lors de la destruction de la table \"recupProduit\"");
+                System.err.println(e.getMessage());
+                System.err.println(e.getErrorCode());
+                System.err.println(e.getSQLState());
+                System.exit(1);
+            }
+        }
+        
+        try {
+            requete = connection.prepareStatement("create table recupProduit(id int, nomproduit varchar(30), prix double, primary key(id))");
+            requete.execute();
+        } catch (SQLException e) {
+            System.err.println("erreur lors de la création de la table \"recupProduit\" dans le Main.java");
+            System.err.println(e.getMessage());
+            System.err.println(e.getErrorCode());
+            System.err.println(e.getSQLState());
+            System.exit(1);
+        }*/
+        
         try {
             requete = connection.prepareStatement("insert into produit values (?, ?, ?, ?)");
             requete.setInt(1, 1);
@@ -88,9 +112,30 @@ public class Main {
             System.exit(1);	
         }
         
+        try {
+            requete = connection.prepareStatement("select * from recupProduit");
+            resultat = requete.executeQuery();
+            while (resultat.next()) {
+                int id = resultat.getInt("id");
+                String nomProduit = resultat.getString("nomProduit");
+                double prix = resultat.getDouble("prix");
+                produits.add(new Produit(id, nomProduit, prix));
+            }
+        } catch(SQLException e) {
+            e.printStackTrace();
+            System.err.println("erreur lors de l'insertion");
+            System.exit(1);
+        }
+        produits.add(new Produit(1234, "Produit frais", 15));
+        produits.add(new Produit(1334, "Produit frais", 15));
+        produits.add(new Produit(234, "Produit frais", 15));
+        produits.add(new Produit(134, "Produit frais", 15));
+        produits.add(new Produit(12, "Produit frais", 15));
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AffichageCaisse(produits).setVisible(true);
+                AffichageCaisse afc = new AffichageCaisse(produits);
+                afc.setVisible(true);
             }
         });
     }
