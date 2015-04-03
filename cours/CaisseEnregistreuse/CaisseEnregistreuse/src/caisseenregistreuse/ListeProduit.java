@@ -6,7 +6,7 @@
 package caisseenregistreuse;
 
 import java.util.ArrayList;
-import javax.swing.AbstractListModel;
+import javax.swing.table.AbstractTableModel;
 
 /**
  *
@@ -16,48 +16,62 @@ import javax.swing.AbstractListModel;
  * 
  * ici c'est la liste de prooduit qui va permettre de stocké les produits passés en caisse
  */
-public class ListeProduit extends AbstractListModel<Produit>{
+public class ListeProduit extends AbstractTableModel{
     private ArrayList<Produit> produits;
+    private Produit produit;
+    private final String[] entetes = {"N° du Produit", "Nom du produit", "Prix", "Réduction"};
+    public ListeProduit() {}
     
-    public ListeProduit(ArrayList<Produit> produits) {
-        this.produits = produits;
+    public ArrayList<Produit> getListProduit() {
+        return produits;
     }
     
-    public float prixTotal() {
-        float total = 0;
+    public double prixTotal() {
+        double total = 0;
         
         for (Produit produit : produits) {
             double prix = produit.getPrix();
+            total = prix+total;
         }
         
         return total;
     }
+
+    public String getColumnName(int col) {
+        return entetes[col];
+    }
     
-    public void ajouter(Produit p) {
-        produits.add(p);
-        int index = produits.indexOf(p);
-        fireContentsChanged(this, index, index); // la JList est prévenue du changement pour qu'elle se mette à jour
-    }
-
-    public void supprimer(Produit p) {
-        int index = produits.indexOf(p);
-        produits.remove(p);
-        fireIntervalRemoved(this, index, index); // la JList est prévenue du changement pour qu'elle se mette à jour
-    }
-
-    public void modifier(Produit p) {
-        int index = produits.indexOf(p);
-        fireContentsChanged(this, index, index); // la JList est prévenue du changement pour qu'elle se mette à jour
-    }
-
     @Override
-    public int getSize() {
+    public int getRowCount() {
         return produits.size();
     }
 
     @Override
-    public Produit getElementAt(int index) {
-        return produits.get(index);
+    public int getColumnCount() {
+        return entetes.length;
     }
-    
-}
+
+    @Override
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        switch(columnIndex) {
+            case 0:
+                // Numero produit
+                return produits.get(rowIndex).getNumero();
+            
+            case 1:
+                // Nom produit
+                 return produits.get(rowIndex).getNom();
+
+            case 2:
+                // Prix
+                return produits.get(rowIndex).getPrix();
+
+            case 3:
+                // Reduction
+                return produits.get(rowIndex).getReduction();
+
+            default:
+                    throw new IllegalArgumentException();
+            }
+        }
+    }

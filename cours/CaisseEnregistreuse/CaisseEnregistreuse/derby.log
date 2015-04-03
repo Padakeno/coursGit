@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Fri Mar 27 17:13:20 CET 2015:
-Amorçage de Derby version The Apache Software Foundation - Apache Derby - 10.10.1.3 - (1557168) : instance a816c00e-014c-5c02-5960-000006f5ae78 
+Fri Apr 03 16:40:45 CEST 2015:
+Amorçage de Derby version The Apache Software Foundation - Apache Derby - 10.10.1.3 - (1557168) : instance a816c00e-014c-7fba-191f-0000068fb808 
 dans le répertoire de base de données /home/slam/Documents/cours/CaisseEnregistreuse/CaisseEnregistreuse/db_produit avec le chargeur de classe sun.misc.Launcher$AppClassLoader@610455d6
 Chargé de file:/usr/lib/java/jdk1.8.0_20/db/lib/derby.jar
 java.vendor=Oracle Corporation

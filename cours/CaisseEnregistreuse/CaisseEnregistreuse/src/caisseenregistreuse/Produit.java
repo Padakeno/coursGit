@@ -5,6 +5,8 @@
  */
 package caisseenregistreuse;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author slam
@@ -14,11 +16,13 @@ public class Produit {
     private String nomProduit;
     private double prix;
     private String codeBarre;
+    private int reduction;
     
-    public Produit(int numero, String nomProduit, double prix) {
+    public Produit(int numero, String nomProduit, double prix, int reduction) {
         this.numero = numero;
         this.nomProduit = nomProduit;
         this.prix = prix;
+        this.reduction = reduction;
     }
     
     public int getNumero() {
@@ -35,5 +39,14 @@ public class Produit {
     
     public double getPrix() {
         return prix;
+    }
+    
+    public int getReduction() {
+        return reduction;
+    }
+    
+    @Override
+    public String toString() {
+        return this.nomProduit;
     }
 }
