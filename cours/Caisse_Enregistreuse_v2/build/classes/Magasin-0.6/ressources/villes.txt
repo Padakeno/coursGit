@@ -1,0 +1,6 @@
+03;51100;reims
+03;52000;chaumont
+03;10000;troyes
+04;74000;annecy
+04;06000;nice
+01;75000;paris

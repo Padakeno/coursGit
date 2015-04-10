@@ -1,0 +1,6 @@
+Avant de lancer le programme, exécutez le script Magasin-0.6.sql avec psql.
+
+Pour lancer le programme :
+    - sous Linux, entrer en ligne de commande : bash lancer.sh ;
+    - sous Windows, entrer en ligne de commande : lancer.bat.
+
