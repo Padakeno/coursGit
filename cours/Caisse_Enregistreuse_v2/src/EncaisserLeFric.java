@@ -1,7 +1,6 @@
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /*
  * To change this license header, choose License Headers in Project Properties.

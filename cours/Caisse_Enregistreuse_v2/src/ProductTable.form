@@ -32,7 +32,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane1" pref="651" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" pref="644" max="32767" attributes="0"/>
                           <Group type="102" alignment="1" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
@@ -45,7 +45,7 @@
                                           <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="179" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
@@ -61,21 +61,24 @@
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jLabel2" min="-2" pref="198" max="-2" attributes="0"/>
-                          <Component id="resteVerser" max="32767" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
-                              <Component id="miseAttente" min="-2" pref="239" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="jLabel2" min="-2" pref="198" max="-2" attributes="0"/>
+                              <Component id="resteVerser" max="32767" attributes="0"/>
+                              <Component id="paiement" alignment="1" max="32767" attributes="0"/>
+                              <Component id="finAttente" alignment="1" max="32767" attributes="0"/>
+                              <Component id="ajout" alignment="0" max="32767" attributes="0"/>
+                              <Component id="supprimer" alignment="0" max="32767" attributes="0"/>
+                              <Component id="annuleVente" alignment="0" pref="240" max="32767" attributes="0"/>
+                              <Component id="encaisser" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jPanel1" alignment="1" min="-2" max="-2" attributes="0"/>
+                              <Component id="miseAttente" alignment="0" pref="240" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="paiement" alignment="1" max="32767" attributes="0"/>
-                          <Component id="finAttente" alignment="1" max="32767" attributes="0"/>
-                          <Component id="ajout" alignment="0" max="32767" attributes="0"/>
-                          <Component id="supprimer" alignment="0" max="32767" attributes="0"/>
-                          <Component id="annuleVente" alignment="0" max="32767" attributes="0"/>
-                          <Component id="encaisser" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jPanel1" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="jButton13" min="-2" pref="240" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                   </Group>
                   <Component id="close" alignment="1" max="32767" attributes="0"/>
@@ -101,14 +104,15 @@
                   <Component id="jButton14" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jButton17" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jButton18" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="miseAttente" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="miseAttente" min="-2" pref="37" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="finAttente" min="-2" pref="43" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                      <Component id="jButton13" min="-2" pref="41" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="paiement" min="-2" pref="46" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
@@ -599,6 +603,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="miseAttente">
       <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+        </Property>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Waree" size="14" style="1"/>
         </Property>
@@ -730,6 +737,21 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="closeActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButton13">
+      <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+        </Property>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Waree" size="14" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Remise"/>
+        <Property name="focusable" type="boolean" value="false"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton13ActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

@@ -1,6 +1,4 @@
 
-import java.awt.Color;
-import java.awt.List;
 import java.awt.Toolkit;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
@@ -10,9 +8,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.AttributedCharacterIterator;
 import java.util.ArrayList;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -30,6 +26,7 @@ public class ProductTable extends javax.swing.JFrame {
 
     private int i = 1;
     private ArrayList<ArrayList<Object>> maListe = new ArrayList<ArrayList<Object>>();
+    private BigDecimal prixRemise = new BigDecimal("0");
     private EncaisserLeFric elc;
 
     /**
@@ -41,8 +38,8 @@ public class ProductTable extends javax.swing.JFrame {
         ResultSet resultat = null;
 
         try {
-            Class.forName("org.postgresql.Driver"); // chargement du pilote (driver) permettant d'accéder au SGBDR
-            connection = DriverManager.getConnection("jdbc:postgresql:magasin_0_6", "gerant", "gerant"); // chemin de la base, utilisateur, mot de passe
+            Class.forName("org.apache.derby.jdbc.EmbeddedDriver"); // chargement du pilote (driver) permettant d'accéder au SGBDR
+            connection = DriverManager.getConnection("jdbc:derby:magasin_0_6;create=true"); // chemin de la base, utilisateur, mot de passe
         } catch (ClassNotFoundException e) {
             System.err.println("erreur driver non trouvé");
             e.printStackTrace();
@@ -51,6 +48,55 @@ public class ProductTable extends javax.swing.JFrame {
             System.err.println("erreur SQL au moment de la connection");
             e.printStackTrace();
             System.exit(1);
+        }
+        
+        try {
+            requete = connection.prepareStatement("drop table produit");
+            requete.execute();
+        } catch (SQLException e) {
+            if (e.getSQLState().compareTo("42Y55") != 0) {
+                // le code d'erreur n'est pas 42Y55 : il y a un problème
+                System.err.println("erreur lors de la destruction de la table \"listecode\"");
+                System.err.println(e.getMessage());
+                System.err.println(e.getErrorCode());
+                System.err.println(e.getSQLState());
+                System.exit(1);
+            }
+        }
+        
+        try {
+            requete = connection.prepareStatement("create table produit(ref int not null,nom varchar(200),prix double,primary key(ref))");
+            requete.execute();
+        } catch (SQLException e) {
+            System.err.println("erreur lors de la création de la table \"produit\"");
+            System.err.println(e.getMessage());
+            System.err.println(e.getErrorCode());
+            System.err.println(e.getSQLState());
+            System.exit(1);
+        }
+        
+        ArrayList<Integer> ref = new ArrayList<>();
+        ref.add(767029);ref.add(359731);ref.add(144241);ref.add(524497);ref.add(100738);ref.add(723906);ref.add(262316);ref.add(457879);ref.add(201023);ref.add(795057);ref.add(279884);ref.add(158195);
+        
+        ArrayList<String> nom = new ArrayList<>();
+        nom.add("Micro alpha pro");nom.add("easy owl IV");nom.add("big fox IV");nom.add("small alpha IV");nom.add("super tango ");nom.add("super cobra");nom.add("easy bravo II");nom.add("easy alpha pro");nom.add("turbo moon 3000");nom.add("super star IV");nom.add("turbo cobra V");nom.add("nano bravo pro");
+        
+        ArrayList<Double> prix = new ArrayList<>();
+        prix.add(8.72);prix.add(53.3);prix.add(1.54);prix.add(18.99);prix.add(176.62);prix.add(3.05);prix.add(8.71);prix.add(18.16);prix.add(127.62);prix.add(94.33);prix.add(94.33);prix.add(8.41);
+        
+        for (int i=0; i<12; i++) {
+            try {
+            requete = connection.prepareStatement("insert into produit(ref, nom, prix) values (?, ?, ?)");
+            requete.setInt(1, ref.get(i));
+            requete.setString(2, nom.get(i));
+            requete.setDouble(3, prix.get(i));
+            
+            requete.executeUpdate();
+            } catch(SQLException e) {
+                e.printStackTrace();
+                System.err.println("erreur lors de l'insertion");
+                System.exit(1);	
+            }
         }
         initComponents();
         this.elc = new EncaisserLeFric(this, true);
@@ -74,8 +120,8 @@ public class ProductTable extends javax.swing.JFrame {
         PreparedStatement requete = null;
         ResultSet resultat = null;
         try {
-            Class.forName("org.postgresql.Driver"); // chargement du pilote (driver) permettant d'accéder au SGBDR
-            connection = DriverManager.getConnection("jdbc:postgresql:magasin_0_6", "gerant", "gerant"); // chemin de la base, utilisateur, mot de passe
+            Class.forName("org.apache.derby.jdbc.EmbeddedDriver"); // chargement du pilote (driver) permettant d'accéder au SGBDR
+            connection = DriverManager.getConnection("jdbc:derby:magasin_0_6;create=true"); // chemin de la base, utilisateur, mot de passe
         } catch (ClassNotFoundException e) {
             System.err.println("erreur driver non trouvé");
             e.printStackTrace();
@@ -104,8 +150,9 @@ public class ProductTable extends javax.swing.JFrame {
         }
     }
     
-    public ArrayList<ArrayList<Object>> getNomProduit() {
+     public ArrayList<ArrayList<Object>> getProduit() {
         DefaultTableModel model = (DefaultTableModel) tbProduct.getModel();
+        ArrayList<ArrayList<Object>> maListe = new ArrayList<ArrayList<Object>>();
         for (int k = 0; k < tbProduct.getRowCount(); k++) {
             ArrayList<Object> liste = new ArrayList<Object>();
             for (int j = 0; j < tbProduct.getColumnCount(); j++) {
@@ -116,7 +163,7 @@ public class ProductTable extends javax.swing.JFrame {
         }
         return maListe;
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -161,6 +208,7 @@ public class ProductTable extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         resteVerser = new javax.swing.JTextField();
         close = new javax.swing.JButton();
+        jButton13 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Caisse Enregistreuse Reims Outillage");
@@ -443,6 +491,7 @@ public class ProductTable extends javax.swing.JFrame {
             }
         });
 
+        miseAttente.setBackground(new java.awt.Color(255, 255, 255));
         miseAttente.setFont(new java.awt.Font("Waree", 1, 14)); // NOI18N
         miseAttente.setText("Mise en attente");
         miseAttente.setFocusable(false);
@@ -530,6 +579,16 @@ public class ProductTable extends javax.swing.JFrame {
             }
         });
 
+        jButton13.setBackground(new java.awt.Color(255, 255, 255));
+        jButton13.setFont(new java.awt.Font("Waree", 1, 14)); // NOI18N
+        jButton13.setText("Remise");
+        jButton13.setFocusable(false);
+        jButton13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton13ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -539,7 +598,7 @@ public class ProductTable extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 651, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
@@ -550,7 +609,7 @@ public class ProductTable extends javax.swing.JFrame {
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel1)
                                             .addComponent(jLabel4))
-                                        .addGap(0, 0, Short.MAX_VALUE)))
+                                        .addGap(0, 179, Short.MAX_VALUE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3)
@@ -560,20 +619,22 @@ public class ProductTable extends javax.swing.JFrame {
                                         .addComponent(jButton18, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jButton14)))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(resteVerser)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addComponent(miseAttente, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(paiement, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(finAttente, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(ajout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(supprimer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(annuleVente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(encaisser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(resteVerser)
+                                .addComponent(paiement, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(finAttente, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(ajout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(supprimer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(annuleVente, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+                                .addComponent(encaisser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(miseAttente, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(13, 13, 13))))
                     .addComponent(close, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -592,14 +653,15 @@ public class ProductTable extends javax.swing.JFrame {
                     .addComponent(quantite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton14)
                     .addComponent(jButton17)
-                    .addComponent(jButton18))
+                    .addComponent(jButton18)
+                    .addComponent(miseAttente, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(miseAttente, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
                         .addComponent(finAttente, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(8, 8, 8)
+                        .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(paiement, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -635,8 +697,8 @@ public class ProductTable extends javax.swing.JFrame {
         ResultSet resultat = null;
 
         try {
-            Class.forName("org.postgresql.Driver"); // chargement du pilote (driver) permettant d'accéder au SGBDR
-            connection = DriverManager.getConnection("jdbc:postgresql:magasin_0_6", "gerant", "gerant"); // chemin de la base, utilisateur, mot de passe
+            Class.forName("org.apache.derby.jdbc.EmbeddedDriver"); // chargement du pilote (driver) permettant d'accéder au SGBDR
+            connection = DriverManager.getConnection("jdbc:derby:magasin_0_6;create=true"); // chemin de la base, utilisateur, mot de passe
         } catch (ClassNotFoundException e) {
             System.err.println("erreur driver non trouvé");
             e.printStackTrace();
@@ -678,28 +740,35 @@ public class ProductTable extends javax.swing.JFrame {
             //iMessage.setText("Product Name should not be left blank");
         }
         this.jTextField1.setText("");
-        System.out.println(this.getNomProduit());
+        //System.out.println(this.getProduit());
 
     }//GEN-LAST:event_ajoutActionPerformed
 
     private void tbProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbProductMouseClicked
         DefaultTableModel model = (DefaultTableModel) tbProduct.getModel();
-        article.setText(model.getValueAt(tbProduct.getSelectedRow(), 0).toString());
-        paiement.setSelectedItem(model.getValueAt(tbProduct.getSelectedRow(), 2).toString());
-        quantite.setText(model.getValueAt(tbProduct.getSelectedRow(), 2).toString());
+        article.setText(model.getValueAt(tbProduct.getSelectedRow(), 2).toString());
+        quantite.setText(model.getValueAt(tbProduct.getSelectedRow(), 3).toString());
     }//GEN-LAST:event_tbProductMouseClicked
 
     private void supprimerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supprimerActionPerformed
         DefaultTableModel model = (DefaultTableModel) tbProduct.getModel();
+        BigDecimal prixRestant = new BigDecimal("0");
+        //JOptionPane.showMessageDialog(null,"supprimé");
         if (tbProduct.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(null,"if");
             if (tbProduct.getRowCount() == 0) {
-                //iMessage.setText("Table is empty");
+                JOptionPane.showMessageDialog(null,"table is empty");
             } else {
-                //iMessage.setText("You must select a product");
+                JOptionPane.showMessageDialog(null,"You must select a product");
             }
         } else {
+            BigDecimal prix = new BigDecimal(model.getValueAt(tbProduct.getSelectedRow(), 4).toString());
+            BigDecimal quantite = new BigDecimal(model.getValueAt(tbProduct.getSelectedRow(), 3).toString());
+            prixRestant = new BigDecimal(resteVerser.getText()).subtract(prix.multiply(quantite));
             model.removeRow(tbProduct.getSelectedRow());
         }
+        
+        resteVerser.setText(prixRestant + "");
     }//GEN-LAST:event_supprimerActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -747,8 +816,10 @@ public class ProductTable extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
-        String test = this.jTextField1.getText();
-        this.jTextField1.setText(this.jTextField1.getText().substring(0, test.length() - 1));
+        if (this.jTextField1.getText().length() > 0) {
+            String test = this.jTextField1.getText();
+            this.jTextField1.setText(this.jTextField1.getText().substring(0, test.length() - 1));
+        }
     }//GEN-LAST:event_jButton12ActionPerformed
 
     private void jButton21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton21ActionPerformed
@@ -781,6 +852,7 @@ public class ProductTable extends javax.swing.JFrame {
     private void miseAttenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miseAttenteActionPerformed
         DefaultTableModel model = (DefaultTableModel) tbProduct.getModel();
         //ArrayList<ArrayList<Object>> maListe = new ArrayList<ArrayList<Object>>();
+        maListe.clear();
         for (int k = 0; k < tbProduct.getRowCount(); k++) {
             ArrayList<Object> liste = new ArrayList<Object>();
 
@@ -798,11 +870,17 @@ public class ProductTable extends javax.swing.JFrame {
                 model.removeRow(i);
             }
         }
+        
+        this.resteVerser.setText("0");
+        this.article.setText("");
+        this.quantite.setText("1");
+        
     }//GEN-LAST:event_miseAttenteActionPerformed
 
     private void finAttenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_finAttenteActionPerformed
         DefaultTableModel model = (DefaultTableModel) tbProduct.getModel();
-        System.out.println(maListe.size());
+        BigDecimal total = new BigDecimal("0.0");
+        //System.out.println(maListe.size());
         if (model.getRowCount() > 0) {
             for (int i = model.getRowCount() - 1; i > -1; i--) {
                 model.removeRow(i);
@@ -811,6 +889,27 @@ public class ProductTable extends javax.swing.JFrame {
         for (int m = 0; m < maListe.size(); m++) {
             model.addRow(new Object[]{maListe.get(m).get(0), maListe.get(m).get(1), maListe.get(m).get(2), maListe.get(m).get(3), maListe.get(m).get(4)});
         }
+        
+        ArrayList<ArrayList<Object>> maListe = new ArrayList<ArrayList<Object>>();
+        for (int k = 0; k < tbProduct.getRowCount(); k++) {
+            ArrayList<Object> liste = new ArrayList<Object>();
+            for (int j = 0; j < tbProduct.getColumnCount(); j++) {
+                Object selectedObject = tbProduct.getModel().getValueAt(k, j);
+                liste.add(selectedObject);
+            }
+            maListe.add(liste);
+        }
+        
+        // Calcul prix Total
+        for (int j = 0; j < tbProduct.getRowCount(); j++) {
+            String quantite = tbProduct.getModel().getValueAt(j, 3).toString();
+            String prix = tbProduct.getModel().getValueAt(j, 4).toString();
+            String test = Double.parseDouble(quantite) * Double.parseDouble(prix) + "";
+            total = total.add(new BigDecimal(test));
+        }
+        
+        this.resteVerser.setText(total+"");
+        
         maListe.clear();
     }//GEN-LAST:event_finAttenteActionPerformed
 
@@ -825,51 +924,73 @@ public class ProductTable extends javax.swing.JFrame {
 
     private void encaisserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_encaisserActionPerformed
         BigDecimal total = new BigDecimal("0.0");
-        BigDecimal argentClient = new BigDecimal(jTextField1.getText());
         DefaultTableModel model = (DefaultTableModel) tbProduct.getModel();
-
+        BigDecimal argentClient = new BigDecimal("0");
+        
+        // Initialisation de Tableau
+        ArrayList<ArrayList<Object>> maListe = new ArrayList<ArrayList<Object>>();
+        for (int k = 0; k < tbProduct.getRowCount(); k++) {
+            ArrayList<Object> liste = new ArrayList<Object>();
+            for (int j = 0; j < tbProduct.getColumnCount(); j++) {
+                Object selectedObject = tbProduct.getModel().getValueAt(k, j);
+                liste.add(selectedObject);
+            }
+            maListe.add(liste);
+        }
+        
+        // Calcul prix Total
         for (int j = 0; j < tbProduct.getRowCount(); j++) {
             String quantite = tbProduct.getModel().getValueAt(j, 3).toString();
             String prix = tbProduct.getModel().getValueAt(j, 4).toString();
-            //System.out.println(quantite);
-            //System.out.println(prix);
             String test = Double.parseDouble(quantite) * Double.parseDouble(prix) + "";
             total = total.add(new BigDecimal(test));
         }
-        //this.resteVerser.setText(total + "");
+        
+        
+        
+        {
+            //this.resteVerser.setText(total + "");
 
-        if (paiement.getSelectedItem() == "Espèce") {
-            elc.afficherPrixTotal(total, argentClient);
-            elc.renduMonnaie(total, argentClient);
-            elc.setVisible(true);
-        } else if (paiement.getSelectedItem() == "Chèque") {
-
-        }
-
-        this.resteVerser.setText("0");
-        this.jTextField1.setText("");
-        this.article.setText("");
-        this.quantite.setText("1");
-
-        if (model.getRowCount() > 0) {
-            for (int i = model.getRowCount() - 1; i > -1; i--) {
-                model.removeRow(i);
+            if (paiement.getSelectedItem() == "Espèce") {
+                if (new BigDecimal(jTextField1.getText()).compareTo(new BigDecimal(this.resteVerser.getText())) == 1) {
+                    argentClient= new BigDecimal(this.jTextField1.getText());
+                    elc.afficherPrixTotal(total, argentClient);
+                    elc.renduMonnaie(total, argentClient);
+                    elc.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Montant inferieur à la somme à payer !");
+                }
+            } else if (paiement.getSelectedItem() == "CB" || paiement.getSelectedItem() == "Chèque") {
+                argentClient = total;
             }
-        }
-        PrinterJob job = PrinterJob.getPrinterJob();
-        // Définit son contenu à imprimer
-        job.setPrintable(new ImprimerPapierCaisse());
+            
+            //Impression
+            PrinterJob job = PrinterJob.getPrinterJob();
+            // Définit son contenu à imprimer
+            job.setPrintable(new ImprimerPapierCaisse(maListe, resteVerser.getText(), argentClient+"", this.prixRemise));
 
-        // Affiche une boîte de choix d'imprimante
-        if (job.printDialog()){
-           try {
-              // Effectue l'impression
-               job.print();
+            // Affiche une boîte de choix d'imprimante
+            if (true) {
+                try {
+                    // Effectue l'impression
+                    job.print();
 
-           } catch (PrinterException ex) {
-              ex.printStackTrace();
-           }
-        }
+                } catch (PrinterException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            this.resteVerser.setText("0");
+            this.jTextField1.setText("");
+            this.article.setText("");
+            this.quantite.setText("1");
+
+            if (model.getRowCount() > 0) {
+                for (int i = model.getRowCount() - 1; i > -1; i--) {
+                    model.removeRow(i);
+                }
+            }
+        } 
     }//GEN-LAST:event_encaisserActionPerformed
 
     private void closeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeActionPerformed
@@ -887,6 +1008,17 @@ public class ProductTable extends javax.swing.JFrame {
             rechercheBaseDonnee();
         }
     }//GEN-LAST:event_jTextField1CaretUpdate
+
+    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
+        // lorsqu'on clique sur le bouton, une fenetre apparait indiquant le montant de la remise qui est déduit directement du prix
+        /*Remise rem = new Remise(this, true, new BigDecimal(resteVerser.getText()));
+        rem.setVisible(true);*/
+        BigDecimal rv = new BigDecimal(resteVerser.getText());
+        this.prixRemise = new BigDecimal("" + rv.subtract(rv.multiply(new BigDecimal(jTextField1.getText()).divide(new BigDecimal("100")))));
+        this.resteVerser.setText(prixRemise+"");
+        this.jTextField1.setText("");
+        
+    }//GEN-LAST:event_jButton13ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -924,10 +1056,6 @@ public class ProductTable extends javax.swing.JFrame {
                 int ySize = ((int) tk.getScreenSize().getHeight());
                 frame.setSize(xSize, ySize);
                 frame.setVisible(true);
-                /*while (frame.jTextField1.getText() != ) {
-                 JOptionPane.showMessageDialog(null, "ca passe dans la boucle while");
-                 frame.afficher();
-                 }*/
 
                 //frame.show();
             }
@@ -945,6 +1073,7 @@ public class ProductTable extends javax.swing.JFrame {
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
+    private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton14;
     private javax.swing.JButton jButton17;
     private javax.swing.JButton jButton18;
